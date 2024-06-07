@@ -1,14 +1,20 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { BiAdjust } from "react-icons/bi";
 import FormLogin from "../../layout/formLogin/FormLogin";
 import { ContextTheme } from "../../../context/themeContext/ThemeContext";
+import FormRegister from "../../layout/formRegister/FormRegister";
+import { ContextVerificacoes } from "../../../context/verificacoesContext/VerificacoesContext";
 
 const ConteinerPrincipal = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const ConteinerCentral = styled.div`
@@ -16,29 +22,81 @@ const ConteinerCentral = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  gap: 1rem;
-  min-height: 60vh;
-  min-width: 55vh;
-  border-radius: 15px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
-  border: 1px solid
-    ${(props) => (props.theme === "light" ? "none" : "aliceblue")};
-  background-color: ${(props) =>
-    props.theme === "light" ? "none" : "rgba(255, 255, 255, 0.1)"};
+  margin-left: 5vh;
+  gap: 2rem;
+  min-height: 45vh;
+  width: 40vh;
+`;
 
-  svg {
-    font-size: 25px;
+const InfoToogleLogin = styled.div`
+  p {
+    font-size: 15px;
+  }
+  strong {
+    cursor: pointer;
+    &:hover {
+      color: #8c949c;
+    }
+  }
+`;
+
+const ConteinerTexto = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40vh;
+  margin-left: 5vh;
+  height: 35vh;
+  border-right: 2px solid gray;
+  p {
+    font-size: 70px;
   }
 `;
 
 const LoginRegister = () => {
   const { theme, mudarTheme } = useContext(ContextTheme);
+  const { clearStates } = useContext(ContextVerificacoes);
+  const [isRegister, setIsRegister] = useState(false);
+  function togglesetIsRegisterAndClearStates() {
+    setIsRegister(isRegister === false ? true : false);
+    clearStates();
+  }
+
   return (
     <ConteinerPrincipal>
+      <BiAdjust
+        style={{ fontSize: "25px", position: "absolute", marginTop: "10vh" }}
+        onClick={mudarTheme}
+      />
+      <ConteinerTexto>
+        {isRegister ? <p>Sign-up</p> : <p>Sign-in</p>}
+      </ConteinerTexto>
       <ConteinerCentral theme={theme}>
-        <BiAdjust onClick={mudarTheme} />
-        <FormLogin />
+        {isRegister ? (
+          <>
+            <FormRegister />
+            <InfoToogleLogin>
+              <p>
+                If you already have an account -{" "}
+                <strong onClick={togglesetIsRegisterAndClearStates}>
+                  Sign-in
+                </strong>
+              </p>
+            </InfoToogleLogin>
+          </>
+        ) : (
+          <>
+            <FormLogin />
+            <InfoToogleLogin>
+              <p>
+                If you don't have an account -{" "}
+                <strong onClick={togglesetIsRegisterAndClearStates}>
+                  Sign-up
+                </strong>
+              </p>
+            </InfoToogleLogin>
+          </>
+        )}
       </ConteinerCentral>
     </ConteinerPrincipal>
   );

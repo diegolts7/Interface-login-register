@@ -11,6 +11,11 @@ const MyButton = styled.button`
   font-weight: bold;
   border-radius: 5px;
   border: none;
+  cursor: pointer;
+  &:hover {
+    transition: 0.4s;
+    color: black;
+  }
 `;
 
 const Button = ({ nome, event }) => {
